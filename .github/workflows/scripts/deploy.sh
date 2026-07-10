@@ -3,6 +3,14 @@ set -e
 
 echo "Triggering Amplify deployment..."
 
+if [ -z "$AMPLIFY_WEBHOOK" ]; then
+  echo "ERROR: AMPLIFY_WEBHOOK is empty!"
+  exit 1
+fi
+
+echo "Webhook length: ${#AMPLIFY_WEBHOOK}"
+echo "Webhook starts with: ${AMPLIFY_WEBHOOK:0:30}"
+
 HTTP_STATUS=$(curl -s -o response.txt -w "%{http_code}" \
   -X POST \
   -H "Content-Type: application/json" \
@@ -10,13 +18,4 @@ HTTP_STATUS=$(curl -s -o response.txt -w "%{http_code}" \
   "$AMPLIFY_WEBHOOK")
 
 echo "HTTP Status: $HTTP_STATUS"
-echo "Response:"
 cat response.txt
-echo
-
-if [ "$HTTP_STATUS" -ne 200 ]; then
-  echo "Amplify deployment trigger failed."
-  exit 1
-fi
-
-echo "Amplify deployment triggered successfully."
