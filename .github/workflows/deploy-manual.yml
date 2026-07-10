@@ -7,14 +7,20 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to Amplify
     runs-on: ubuntu-latest
 
     environment:
       name: production
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Trigger Amplify
-        run: |
-          curl -X POST -d '{}' "${{ secrets.AMPLIFY_WEBHOOK }}"
+      - name: Make deploy script executable
+        run: chmod +x scripts/deploy.sh
+
+      - name: Trigger Amplify Deployment
+        env:
+          AMPLIFY_WEBHOOK: ${{ secrets.AMPLIFY_WEBHOOK }}
+        run: ./scripts/deploy.sh
