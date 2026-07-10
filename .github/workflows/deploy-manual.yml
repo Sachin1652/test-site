@@ -7,7 +7,6 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Amplify
     runs-on: ubuntu-latest
 
     environment:
@@ -18,9 +17,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Make deploy script executable
-        run: chmod +x scripts/deploy.sh
+        run: chmod +x .github/workflows/scripts/deploy.sh
 
-      - name: Trigger Amplify Deployment
+      - name: Trigger Amplify
         env:
           AMPLIFY_WEBHOOK: ${{ secrets.AMPLIFY_WEBHOOK }}
-        run: ./scripts/deploy.sh
+        run: ./.github/workflows/scripts/deploy.sh
