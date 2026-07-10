@@ -13,13 +13,11 @@ jobs:
       name: production
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Make deploy script executable
-        run: chmod +x .github/workflows/scripts/deploy.sh
+      - uses: actions/checkout@v4
 
       - name: Trigger Amplify
-        env:
-          AMPLIFY_WEBHOOK: ${{ secrets.AMPLIFY_WEBHOOK }}
-        run: ./.github/workflows/scripts/deploy.sh
+        run: |
+          curl -X POST \
+            -d '{}' \
+            "${{ secrets.AMPLIFY_WEBHOOK }}" \
+            -H "Content-Type: application/json"
